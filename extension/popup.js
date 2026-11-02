@@ -2,6 +2,10 @@
 const DEFAULTS = { speak: 'end', headings: true };
 const status = document.getElementById('status');
 
+// Texte in der Browsersprache (_locales)
+for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = chrome.i18n.getMessage(el.dataset.i18n);
+document.documentElement.lang = chrome.i18n.getMessage('langCode');
+
 chrome.storage.sync.get(DEFAULTS, v => {
   const r = document.querySelector(`input[name=speak][value="${v.speak}"]`);
   if (r) r.checked = true;
@@ -9,7 +13,7 @@ chrome.storage.sync.get(DEFAULTS, v => {
 });
 
 function saved() {
-  status.textContent = 'Gespeichert';
+  status.textContent = chrome.i18n.getMessage('saved');
   setTimeout(() => { status.textContent = ''; }, 1500);
 }
 

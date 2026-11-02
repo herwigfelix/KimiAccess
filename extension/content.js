@@ -13,31 +13,42 @@
   window.__kimiAccess = true;
 
   // ---------------------------------------------------------------------------
-  // Icon-Namen (Attribut name="" an <svg class="iconify">) → deutsche Beschriftung
+  // Sprache: Browsersprache Deutsch → deutsche Beschriftungen, sonst englische
+  // ---------------------------------------------------------------------------
+  let uiLang = navigator.language || 'en';
+  try { uiLang = chrome.i18n.getUILanguage() || uiLang; } catch { /* außerhalb der Erweiterung */ }
+  const DE = /^de\b/i.test(uiLang);
+  const L = (de, en) => (DE ? de : en);
+  // werden auch als Selektor genutzt (Stopp-Kürzel, Senden-Erkennung)
+  const STOP_LABEL = L('Antwort stoppen', 'Stop answer');
+  const SEND_LABEL = L('Senden', 'Send');
+
+  // ---------------------------------------------------------------------------
+  // Icon-Namen (Attribut name="" an <svg class="iconify">) → [deutsch, englisch]
   // ---------------------------------------------------------------------------
   const ICON_LABELS = {
-    Add: 'Hinzufügen', AddConversation: 'Neuer Chat', Add_member: 'Mitglied hinzufügen',
-    Close: 'Schließen', Close_f: 'Schließen', BaseClose: 'Schließen', CloseIconIn_f: 'Schließen',
-    Copy: 'Kopieren', CopyFromClipboard: 'Aus Zwischenablage einfügen',
-    Code: 'Code', Folder: 'Dateien', FileFolder: 'Dateien', Setting: 'Einstellungen', Settings: 'Einstellungen',
-    Down: 'Nach unten', Down_b: 'Nach unten', Up: 'Nach oben', ChevronDown: 'Aufklappen', ChevronRight: 'Weiter',
-    ChevronLeft: 'Zurück', Left: 'Zurück', Left_b: 'Zurück', Right: 'Weiter', Right_b: 'Weiter',
-    Edit: 'Bearbeiten', Delete: 'Löschen', Refresh: 'Aktualisieren', Refresh_b: 'Neu starten',
-    Share: 'Teilen', Share_a: 'Teilen', Download: 'Herunterladen', Upload: 'Hochladen', Link: 'Link',
-    More: 'Mehr', Ellipsis: 'Mehr Optionen', Menu: 'Menü', Magnify: 'Suchen', Search: 'Suchen',
-    Expand: 'Erweitern', Collapse: 'Einklappen', FullScreen: 'Vollbild', FitScreen: 'An Fenster anpassen',
-    Eye: 'Anzeigen', EyeOff: 'Verbergen', Check: 'Bestätigen', Checkmark: 'Bestätigen', Info: 'Info',
-    Clip: 'Datei anhängen', Diagnosis: 'KI-Diagnose', MCP: 'Konfiguration', Save: 'Sichern',
-    Document: 'Dokument', Document_b: 'Dokument', Message: 'Feedback', Gift: 'Geschenk',
-    Like: 'Gefällt mir', Dislike: 'Gefällt mir nicht', Good: 'Gefällt mir', Bad: 'Gefällt mir nicht',
-    ThumbUp: 'Gefällt mir', ThumbDown: 'Gefällt mir nicht', Stop: 'Stoppen', Send: 'Senden',
-    ArrowUp: 'Senden', Enter: 'Senden', Voice: 'Spracheingabe', Microphone: 'Spracheingabe', Mic: 'Spracheingabe',
-    Sidebar: 'Seitenleiste', Pin: 'Anheften', Unpin: 'Lösen', Star: 'Favorit', Calendar: 'Kalender',
-    Clock: 'Zeit', History: 'Verlauf', Browser: 'Browser', Image: 'Bild', InsertImage: 'Bild einfügen',
-    Location: 'Ort', Memory: 'Erinnerung', Translate: 'Übersetzen', Play: 'Abspielen', Pause: 'Pause',
-    Volume: 'Vorlesen', Speaker: 'Vorlesen', Retry: 'Erneut versuchen', Regenerate: 'Neu generieren',
-    Update: 'Aktualisieren', MoveForward: 'Zurücksetzen', Kimiclaw: 'Kimi Claw', WebBridge: 'Kimi WebBridge',
-    UpperRight: 'Öffnen', Flag: 'Melden', Comment: 'Kommentar', Commands: 'Befehle', Log: 'Protokoll',
+    Add: ['Hinzufügen', 'Add'], AddConversation: ['Neuer Chat', 'New chat'], Add_member: ['Mitglied hinzufügen', 'Add member'],
+    Close: ['Schließen', 'Close'], Close_f: ['Schließen', 'Close'], BaseClose: ['Schließen', 'Close'], CloseIconIn_f: ['Schließen', 'Close'],
+    Copy: ['Kopieren', 'Copy'], CopyFromClipboard: ['Aus Zwischenablage einfügen', 'Paste from clipboard'],
+    Code: ['Code', 'Code'], Folder: ['Dateien', 'Files'], FileFolder: ['Dateien', 'Files'], Setting: ['Einstellungen', 'Settings'], Settings: ['Einstellungen', 'Settings'],
+    Down: ['Nach unten', 'Down'], Down_b: ['Nach unten', 'Down'], Up: ['Nach oben', 'Up'], ChevronDown: ['Aufklappen', 'Expand'], ChevronRight: ['Weiter', 'Next'],
+    ChevronLeft: ['Zurück', 'Back'], Left: ['Zurück', 'Back'], Left_b: ['Zurück', 'Back'], Right: ['Weiter', 'Next'], Right_b: ['Weiter', 'Next'],
+    Edit: ['Bearbeiten', 'Edit'], Delete: ['Löschen', 'Delete'], Refresh: ['Aktualisieren', 'Refresh'], Refresh_b: ['Neu starten', 'Restart'],
+    Share: ['Teilen', 'Share'], Share_a: ['Teilen', 'Share'], Download: ['Herunterladen', 'Download'], Upload: ['Hochladen', 'Upload'], Link: ['Link', 'Link'],
+    More: ['Mehr', 'More'], Ellipsis: ['Mehr Optionen', 'More options'], Menu: ['Menü', 'Menu'], Magnify: ['Suchen', 'Search'], Search: ['Suchen', 'Search'],
+    Expand: ['Erweitern', 'Expand'], Collapse: ['Einklappen', 'Collapse'], FullScreen: ['Vollbild', 'Full screen'], FitScreen: ['An Fenster anpassen', 'Fit to window'],
+    Eye: ['Anzeigen', 'Show'], EyeOff: ['Verbergen', 'Hide'], Check: ['Bestätigen', 'Confirm'], Checkmark: ['Bestätigen', 'Confirm'], Info: ['Info', 'Info'],
+    Clip: ['Datei anhängen', 'Attach file'], Diagnosis: ['KI-Diagnose', 'AI diagnosis'], MCP: ['Konfiguration', 'Configuration'], Save: ['Sichern', 'Save'],
+    Document: ['Dokument', 'Document'], Document_b: ['Dokument', 'Document'], Message: ['Feedback', 'Feedback'], Gift: ['Geschenk', 'Gift'],
+    Like: ['Gefällt mir', 'Like'], Dislike: ['Gefällt mir nicht', 'Dislike'], Good: ['Gefällt mir', 'Like'], Bad: ['Gefällt mir nicht', 'Dislike'],
+    ThumbUp: ['Gefällt mir', 'Like'], ThumbDown: ['Gefällt mir nicht', 'Dislike'], Stop: ['Stoppen', 'Stop'], Send: ['Senden', 'Send'],
+    ArrowUp: ['Senden', 'Send'], Enter: ['Senden', 'Send'], Voice: ['Spracheingabe', 'Voice input'], Microphone: ['Spracheingabe', 'Voice input'], Mic: ['Spracheingabe', 'Voice input'],
+    Sidebar: ['Seitenleiste', 'Sidebar'], Pin: ['Anheften', 'Pin'], Unpin: ['Lösen', 'Unpin'], Star: ['Favorit', 'Favorite'], Calendar: ['Kalender', 'Calendar'],
+    Clock: ['Zeit', 'Time'], History: ['Verlauf', 'History'], Browser: ['Browser', 'Browser'], Image: ['Bild', 'Image'], InsertImage: ['Bild einfügen', 'Insert image'],
+    Location: ['Ort', 'Location'], Memory: ['Erinnerung', 'Memory'], Translate: ['Übersetzen', 'Translate'], Play: ['Abspielen', 'Play'], Pause: ['Pause', 'Pause'],
+    Volume: ['Vorlesen', 'Read aloud'], Speaker: ['Vorlesen', 'Read aloud'], Retry: ['Erneut versuchen', 'Try again'], Regenerate: ['Neu generieren', 'Regenerate'],
+    Update: ['Aktualisieren', 'Update'], MoveForward: ['Zurücksetzen', 'Reset'], Kimiclaw: ['Kimi Claw', 'Kimi Claw'], WebBridge: ['Kimi WebBridge', 'Kimi WebBridge'],
+    UpperRight: ['Öffnen', 'Open'], Flag: ['Melden', 'Report'], Comment: ['Kommentar', 'Comment'], Commands: ['Befehle', 'Commands'], Log: ['Protokoll', 'Log'],
   };
 
   // ---------------------------------------------------------------------------
@@ -47,35 +58,35 @@
   const RULES = [
     // Claw-Chat: Kopfzeilen-Symbole
     { sel: '.header-action:has(svg[name="Code"])', label: 'Terminal' },
-    { sel: '.header-action:has(svg[name="Folder"])', label: 'Dateien' },
-    { sel: '.header-action:has(svg[name="Setting"])', label: 'Claw-Einstellungen' },
-    { sel: '.bot-intro-id-copy', label: 'Bot-ID kopieren' },
-    { sel: '.bot-config-header .icon-button:has(svg[name="Close"])', label: 'Einstellungen schließen' },
-    { sel: '.to-bottom', label: 'Zum Ende des Chats springen' },
-    { sel: '.toolkit-trigger-btn', label: 'Dateien und Skills hinzufügen' },
+    { sel: '.header-action:has(svg[name="Folder"])', label: L('Dateien', 'Files') },
+    { sel: '.header-action:has(svg[name="Setting"])', label: L('Claw-Einstellungen', 'Claw settings') },
+    { sel: '.bot-intro-id-copy', label: L('Bot-ID kopieren', 'Copy bot ID') },
+    { sel: '.bot-config-header .icon-button:has(svg[name="Close"])', label: L('Einstellungen schließen', 'Close settings') },
+    { sel: '.to-bottom', label: L('Zum Ende des Chats springen', 'Jump to end of chat') },
+    { sel: '.toolkit-trigger-btn', label: L('Dateien und Skills hinzufügen', 'Add files and skills') },
     { sel: '.toolkit-item', role: 'menuitem' },
     { sel: '.bot-actions-menu-item', role: 'button' },
-    { sel: '.recommend-prompt-item', role: 'button', label: el => 'Vorschlag: ' + txt(el) },
+    { sel: '.recommend-prompt-item', role: 'button', label: el => L('Vorschlag: ', 'Suggestion: ') + txt(el) },
     // Seitenleiste: „Mehr“ je Chat mit Chat-Titel
     { sel: '.next-sidebar-history-item__more', force: true,
-      label: el => 'Optionen für ' + (txt(el.closest('.next-sidebar-history-item')?.querySelector('.next-sidebar-history-item__title')) || 'Chat') },
+      label: el => L('Optionen für ', 'Options for ') + (txt(el.closest('.next-sidebar-history-item')?.querySelector('.next-sidebar-history-item__title')) || 'Chat') },
     // Normaler Chat: Kopfzeile, Nachrichten-Aktionen, Gedankengang, Code
-    { sel: 'header.chat-header-content > svg', role: 'button', force: true, label: 'Chat-Optionen',
+    { sel: 'header.chat-header-content > svg', role: 'button', force: true, label: L('Chat-Optionen', 'Chat options'),
       apply: el => { const h = el.parentElement; setAttr(el, 'aria-haspopup', 'menu'); setAttr(el, 'aria-expanded', h.getAttribute('aria-expanded') || 'false'); } },
     { sel: '.segment-avatar .avatar', hide: true },
-    { sel: '.segment-user-actions .simple-button:has(svg[name="Edit"])', force: true, label: 'Nachricht bearbeiten' },
-    { sel: '.segment-user-actions .simple-button:has(svg[name="Copy"])', force: true, label: 'Nachricht kopieren' },
-    { sel: '.segment-user-actions .simple-button:has(svg[name^="Share"])', force: true, label: 'Nachricht teilen' },
-    { sel: '.segment-assistant-actions .icon-button:has(svg[name="Copy"])', force: true, label: 'Antwort kopieren' },
-    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Refresh"])', force: true, label: 'Antwort neu generieren' },
-    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Share"])', force: true, label: 'Antwort teilen' },
-    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Like"])', force: true, label: 'Gute Antwort' },
-    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Dislike"])', force: true, label: 'Schlechte Antwort' },
+    { sel: '.segment-user-actions .simple-button:has(svg[name="Edit"])', force: true, label: L('Nachricht bearbeiten', 'Edit message') },
+    { sel: '.segment-user-actions .simple-button:has(svg[name="Copy"])', force: true, label: L('Nachricht kopieren', 'Copy message') },
+    { sel: '.segment-user-actions .simple-button:has(svg[name^="Share"])', force: true, label: L('Nachricht teilen', 'Share message') },
+    { sel: '.segment-assistant-actions .icon-button:has(svg[name="Copy"])', force: true, label: L('Antwort kopieren', 'Copy answer') },
+    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Refresh"])', force: true, label: L('Antwort neu generieren', 'Regenerate answer') },
+    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Share"])', force: true, label: L('Antwort teilen', 'Share answer') },
+    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Like"])', force: true, label: L('Gute Antwort', 'Good answer') },
+    { sel: '.segment-assistant-actions .icon-button:has(svg[name^="Dislike"])', force: true, label: L('Schlechte Antwort', 'Bad answer') },
     { sel: '.toolcall-title-container.is-expandable', role: 'button', force: true,
-      label: el => (el.closest('.thinking-container') ? 'Gedankengang: ' : 'Werkzeug: ') + txt(el.querySelector('.toolcall-title-name-text') || el),
+      label: el => (el.closest('.thinking-container') ? L('Gedankengang: ', 'Reasoning: ') : L('Werkzeug: ', 'Tool: ')) + txt(el.querySelector('.toolcall-title-name-text') || el),
       apply: el => setAttr(el, 'aria-expanded', String(!!el.closest('.toolcall-container')?.classList.contains('is-expanded'))) },
-    { sel: '.segment-code', role: 'group', noKey: true, force: true, label: el => 'Codeblock ' + txt(el.querySelector('.segment-code-lang')) },
-    { sel: '.segment-code-header .icon-button', role: 'button', force: true, label: el => txt(el.closest('.segment-code').querySelector('.segment-code-lang')) + '-Code kopieren' },
+    { sel: '.segment-code', role: 'group', noKey: true, force: true, label: el => L('Codeblock ', 'Code block ') + txt(el.querySelector('.segment-code-lang')) },
+    { sel: '.segment-code-header .icon-button', role: 'button', force: true, label: el => L('', 'Copy ') + txt(el.closest('.segment-code').querySelector('.segment-code-lang')) + L('-Code kopieren', ' code') },
     // Tooltip-Kinder liefern sonst doppelte Namen; vorher ins aria-label des Knopfs übernehmen
     { sel: '.kimi-tooltip[role=tooltip]', apply: el => {
       const host = el.parentElement?.closest('button,[role=button],[data-ka]');
@@ -85,28 +96,28 @@
     } },
     // Claw: Dateibaum und Dateivorschau
     { sel: '.file-folder-item-row[role=treeitem]', force: true,
-      label: el => fileName(el) + (el.classList.contains('file-folder-item-row--folder') ? ', Ordner' : '') },
-    { sel: '.file-folder-item-download', force: true, label: el => fileName(el.closest('[role=treeitem]')) + ' herunterladen' },
-    { sel: '.file-preview-header-actions .icon-button:has(svg[name="Copy"])', force: true, label: el => 'Inhalt von ' + previewName(el) + ' kopieren' },
-    { sel: '.file-preview-header-actions .icon-button:has(svg[name="Download"])', force: true, label: el => previewName(el) + ' herunterladen' },
-    { sel: '.file-preview-content', role: 'region', noKey: true, force: true, label: el => 'Vorschau ' + previewName(el) },
+      label: el => fileName(el) + (el.classList.contains('file-folder-item-row--folder') ? L(', Ordner', ', folder') : '') },
+    { sel: '.file-folder-item-download', force: true, label: el => L('', 'Download ') + fileName(el.closest('[role=treeitem]')) + L(' herunterladen', '') },
+    { sel: '.file-preview-header-actions .icon-button:has(svg[name="Copy"])', force: true, label: el => L('Inhalt von ' + previewName(el) + ' kopieren', 'Copy contents of ' + previewName(el)) },
+    { sel: '.file-preview-header-actions .icon-button:has(svg[name="Download"])', force: true, label: el => L(previewName(el) + ' herunterladen', 'Download ' + previewName(el)) },
+    { sel: '.file-preview-content', role: 'region', noKey: true, force: true, label: el => L('Vorschau ', 'Preview ') + previewName(el) },
     // Claw: Terminal
-    { sel: '.xterm-helper-textarea', force: true, label: 'Terminal-Eingabe' },
+    { sel: '.xterm-helper-textarea', force: true, label: L('Terminal-Eingabe', 'Terminal input') },
     { sel: '.terminal-container', role: 'region', noKey: true, label: 'Terminal' },
     // Folien: Stilkarten – Klick öffnet die Vorschau, „Nachmachen“ übernimmt den Stil.
     // Die Karte selbst enthält weitere Knöpfe, daher wird die Beschriftungszeile zum Knopf.
-    { sel: '.ppt-style-selector', role: 'list', noKey: true, label: 'Folienstile' },
+    { sel: '.ppt-style-selector', role: 'list', noKey: true, label: L('Folienstile', 'Slide styles') },
     { sel: '.ppt-style-selector > .style-card', role: 'listitem', noKey: true },
     { sel: '.style-card .style-card-label', role: 'button', force: true,
-      label: el => 'Vorschau ' + (txt(el.querySelector('.label-name')) || txt(el)) + (el.closest('.style-card').classList.contains('selected') ? ', ausgewählt' : '') },
-    { sel: '.style-card .card-action', force: true, label: el => txt(el.closest('.style-card').querySelector('.label-name')) + ' nachmachen' },
+      label: el => L('Vorschau ', 'Preview ') + (txt(el.querySelector('.label-name')) || txt(el)) + (el.closest('.style-card').classList.contains('selected') ? L(', ausgewählt', ', selected') : '') },
+    { sel: '.style-card .card-action', force: true, label: el => L(txt(el.closest('.style-card').querySelector('.label-name')) + ' nachmachen', 'Recreate ' + txt(el.closest('.style-card').querySelector('.label-name'))) },
     { sel: '.style-card .select-mask, .style-card .select-badge', hide: true },
     // Einstellungen
     // Schalter: <label class="switch"><input type=checkbox hidden>… – das Label wird zum switch
     { sel: 'label.switch', role: 'switch', force: true,
       label: el => {
         const row = el.closest('.settings-row') || el.parentElement?.parentElement;
-        return txt(row?.querySelector('.settings-row__label, [class*=label]:not(.switch), [class*=title]')) || 'Schalter';
+        return txt(row?.querySelector('.settings-row__label, [class*=label]:not(.switch), [class*=title]')) || L('Schalter', 'Switch');
       },
       apply: el => {
         const inp = el.querySelector('input[type=checkbox]');
@@ -114,51 +125,51 @@
         const desc = el.closest('.settings-row')?.querySelector('.settings-row__desc');
         if (desc) { if (!desc.id) desc.id = 'ka-d-' + Math.random().toString(36).slice(2, 8); setAttr(el, 'aria-describedby', desc.id); }
       } },
-    { sel: 'label.account-profile__avatar', role: 'button', force: true, label: 'Profilbild ändern' },
+    { sel: 'label.account-profile__avatar', role: 'button', force: true, label: L('Profilbild ändern', 'Change profile picture') },
     // /bot Startseite
     { sel: '.action-title-link', role: 'link' },
     { sel: '.action-card', role: 'group', noKey: true, label: el => txt(el.querySelector('h1,h2,h3,h4,[class*=title]')) || '' },
     // Hauptchat / Seitenleiste
-    { sel: '.user-info-container', role: 'button', label: el => 'Benutzermenü: ' + txt(el) },
+    { sel: '.user-info-container', role: 'button', label: el => L('Benutzermenü: ', 'User menu: ') + txt(el) },
     { sel: '.membership-upgrade', role: 'link' },
-    { sel: '.current-model', role: 'button', force: true, label: el => 'Modell wählen, aktuell ' + txt(el) },
+    { sel: '.current-model', role: 'button', force: true, label: el => L('Modell wählen, aktuell ', 'Choose model, current: ') + txt(el) },
     { sel: '.arrow-action .arrow', hide: true },
-    { sel: '.send-button-container.stop', role: 'button', force: true, label: 'Antwort stoppen',
+    { sel: '.send-button-container.stop', role: 'button', force: true, label: STOP_LABEL,
       apply: el => el.removeAttribute('aria-disabled') },
-    { sel: '.send-button-container:not(.stop)', role: 'button', force: true, label: 'Senden' },
+    { sel: '.send-button-container:not(.stop)', role: 'button', force: true, label: SEND_LABEL },
     { sel: '.rive-doodle-frame', role: 'button', label: 'Kimi Doodle' },
     { sel: '.bot-status-tag--alive', role: 'img', label: 'online', force: true },
     { sel: '.bot-status-tag:not(.bot-status-tag--alive)', role: 'img', label: 'offline', force: true },
     // Websites („App erstellen“/Agent): Karten im Chat, Konsole rechts, Teilen-Popover.
     // Eine zentrale Website-Liste gibt es bei Kimi nicht – jede Website lebt in ihrem Chat.
     { sel: '.chat-header-actions .icon:has(svg[name="Clip"])', role: 'button', force: true,
-      label: el => 'Dateien dieses Chats' + (txt(el.querySelector('.file-count')) ? ` (${txt(el.querySelector('.file-count'))})` : '') },
+      label: el => L('Dateien dieses Chats', 'Files in this chat') + (txt(el.querySelector('.file-count')) ? ` (${txt(el.querySelector('.file-count'))})` : '') },
     // „V3“ zeigt nur per Hover einen Tooltip – kein Knopf, die Version steckt im Kartennamen
     { sel: '.preview-card .version-tag', plain: true },
-    { sel: '.website-preview-card .published-url', role: 'link', force: true, label: el => 'Veröffentlichte Website öffnen: ' + txt(el) },
+    { sel: '.website-preview-card .published-url', role: 'link', force: true, label: el => L('Veröffentlichte Website öffnen: ', 'Open published website: ') + txt(el) },
     // „Vorschau“/„Wiederherstellen“ gibt es je Karte – Kartentitel (mit Version) anhängen
     { sel: '.preview-card .action-button', force: true,
       label: el => txt(el) + ': ' + txt(el.closest('.preview-card').querySelector('.content > .title')) },
     { sel: '.bubble-tabs .bubble-tab', apply: el => setAttr(el, 'aria-pressed', String(el.classList.contains('selected'))) },
-    { sel: 'iframe.code-frame', apply: el => { if (!el.title) el.title = 'Website-Vorschau'; } },
-    { sel: '.visibility-trigger', force: true, label: el => 'Wer kann zugreifen: ' + txt(el) },
+    { sel: 'iframe.code-frame', apply: el => { if (!el.title) el.title = L('Website-Vorschau', 'Website preview'); } },
+    { sel: '.visibility-trigger', force: true, label: el => L('Wer kann zugreifen: ', 'Who can access: ') + txt(el) },
     { sel: '.domain-section .domain-value', force: true,
-      label: el => 'Domain bearbeiten: ' + txt(el) + txt(el.closest('.domain-field')?.querySelector('.domain-suffix')) },
+      label: el => L('Domain bearbeiten: ', 'Edit domain: ') + txt(el) + txt(el.closest('.domain-field')?.querySelector('.domain-suffix')) },
     { sel: '.domain-section .domain-input', apply: el => describeBy(el, el.closest('.domain-field')?.querySelector('.domain-suffix')) },
     { sel: '.website-settings-page .settings-section-title', apply: el => { setAttr(el, 'role', 'heading'); setAttr(el, 'aria-level', '2'); } },
     { sel: '.database .table-item', role: 'button', apply: el => setAttr(el, 'aria-pressed', String(el.classList.contains('selected'))) },
-    { sel: '.database .data-table', force: true, label: el => 'Tabelle ' + txt(el.closest('.database').querySelector('.main-title')) },
+    { sel: '.database .data-table', force: true, label: el => L('Tabelle ', 'Table ') + txt(el.closest('.database').querySelector('.main-title')) },
     // Kimi-Code-Konsole: API-Schlüssel-Tabelle, „Bearbeiten“/„Löschen“ je Zeile mit Schlüsselname
-    { sel: '.api-keys-section .data-table', force: true, label: () => 'API-Schlüssel' },
+    { sel: '.api-keys-section .data-table', force: true, label: () => L('API-Schlüssel', 'API keys') },
     { sel: '.api-keys-section .action-btn', force: true, label: el => {
       const cells = el.closest('tr')?.cells || [];
       const name = txt(cells[2]);
-      return (el.classList.contains('action-btn-delete') ? 'Löschen' : 'Bearbeiten') + ': ' +
-        (name && name !== '-' ? name : 'Schlüssel ' + txt(cells[1]) + ' (ohne Namen)');
+      return (el.classList.contains('action-btn-delete') ? L('Löschen', 'Delete') : L('Bearbeiten', 'Edit')) + ': ' +
+        (name && name !== '-' ? name : L('Schlüssel ', 'key ') + txt(cells[1]) + L(' (ohne Namen)', ' (unnamed)'));
     } },
     // Monaco-Editor im Code-Reiter (Kimi lässt das englische „Editor content“ stehen)
     { sel: '.monaco-code-viewer .native-edit-context[role=textbox], .monaco-code-viewer textarea.inputarea', force: true,
-      label: el => 'Code von ' + previewName(el) },
+      label: el => L('Code von ', 'Code of ') + previewName(el) },
   ];
 
   // Elemente, die schon von Haus aus bedienbar sind
@@ -166,10 +177,10 @@
   const KEY_ROLES = new Set(['button', 'link', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'tab', 'option', 'switch', 'checkbox', 'radio', 'treeitem']);
 
   const txt = el => (el ? (el.innerText || el.textContent || '') : '').replace(/\s+/g, ' ').trim();
-  const fileName = row => (row && (row.querySelector('.file-folder-item-name')?.getAttribute('title') || txt(row.querySelector('.file-folder-item-name')))) || 'Datei';
+  const fileName = row => (row && (row.querySelector('.file-folder-item-name')?.getAttribute('title') || txt(row.querySelector('.file-folder-item-name')))) || L('Datei', 'File');
   const previewName = el => {
     const p = el.closest('.file-preview')?.querySelector('.file-preview-path');
-    if (!p) return 'Datei';
+    if (!p) return L('Datei', 'File');
     const parent = txt(p.querySelector('.file-preview-path-parent'));
     return txt(p).slice(parent.length).trim() || txt(p);
   };
@@ -183,7 +194,7 @@
     const svg = el.matches('svg') ? el : el.querySelector('svg[name]');
     const n = svg && svg.getAttribute('name');
     if (!n) return '';
-    return ICON_LABELS[n] || humanize(n);
+    return ICON_LABELS[n]?.[DE ? 0 : 1] || humanize(n);
   }
 
   function hasName(el) {
@@ -322,7 +333,7 @@
         const dlg = ed.closest('[role=dialog]');
         ph = txt(near) || (dlg && txt(document.getElementById(dlg.getAttribute('aria-labelledby')))) || '';
       }
-      if (ed.isContentEditable) label(ed, ph ? 'Nachricht: ' + ph : 'Nachricht an Kimi');
+      if (ed.isContentEditable) label(ed, ph ? L('Nachricht: ', 'Message: ') + ph : L('Nachricht an Kimi', 'Message to Kimi'));
       else label(ed, ph || ed.getAttribute('name') || '', true);
       if (ed.isContentEditable) {
         setAttr(ed, 'role', 'textbox');
@@ -539,7 +550,7 @@
   }
   function closeButtonIn(root) {
     if (!root) return null;
-    const cands = [...root.querySelectorAll('[aria-label*="chließen"], [data-ka] svg[name^="Close"], button svg[name^="Close"], svg[name^="Close"], [data-testid$=cancel]')];
+    const cands = [...root.querySelectorAll('[aria-label*="chließen"], [aria-label^="Close" i], [data-ka] svg[name^="Close"], button svg[name^="Close"], svg[name^="Close"], [data-testid$=cancel]')];
     for (const c of cands) {
       const el = c.closest('[data-ka],button,[role=button]') || c;
       if (isVisible(el)) return el;
@@ -550,22 +561,22 @@
     const d = topDialog();
     const panel = document.querySelector('.bot-panel, .bot-file-panel, [class*=side-panel]');
     const btn = closeButtonIn(d) || closeButtonIn(panel);
-    if (btn) { synthClick(btn); announce('Geschlossen'); return true; }
-    announce('Nichts zum Schließen');
+    if (btn) { synthClick(btn); announce(L('Geschlossen', 'Closed')); return true; }
+    announce(L('Nichts zum Schließen', 'Nothing to close'));
     return false;
   }
   function focusInput() {
     const ed = [...document.querySelectorAll('.chat-input [contenteditable=true], [contenteditable=true][role=textbox], [contenteditable=true]')].find(isVisible);
     if (ed) { ed.focus(); return true; }
-    announce('Kein Eingabefeld gefunden'); return false;
+    announce(L('Kein Eingabefeld gefunden', 'No input field found')); return false;
   }
   const SHORTCUTS = {
-    KeyX: ['Dialog oder Seitenbereich schließen', closeTop],
-    KeyI: ['Zum Eingabefeld', focusInput],
-    KeyL: ['Letzte Antwort vorlesen', () => readLastAnswer()],
-    KeyM: ['Zur letzten Antwort springen', () => focusLastAnswer()],
-    KeyS: ['Antwort stoppen', () => { const b = document.querySelector('[aria-label="Antwort stoppen"]'); if (b) synthClick(b); else announce('Keine laufende Antwort'); }],
-    KeyH: ['Tastenkürzel ansagen', () => announce('KimiAccess Tastenkürzel, jeweils mit Alt und Umschalt: ' +
+    KeyX: [L('Dialog oder Seitenbereich schließen', 'Close dialog or side panel'), closeTop],
+    KeyI: [L('Zum Eingabefeld', 'Go to message input'), focusInput],
+    KeyL: [L('Letzte Antwort vorlesen', 'Read last answer'), () => readLastAnswer()],
+    KeyM: [L('Zur letzten Antwort springen', 'Jump to last answer'), () => focusLastAnswer()],
+    KeyS: [L('Antwort stoppen', 'Stop answer'), () => { const b = document.querySelector(`[aria-label="${STOP_LABEL}"]`); if (b) synthClick(b); else announce(L('Keine laufende Antwort', 'No answer in progress')); }],
+    KeyH: [L('Tastenkürzel ansagen', 'Announce shortcuts'), () => announce(L('KimiAccess Tastenkürzel, jeweils mit Alt und Umschalt: ', 'KimiAccess shortcuts, each with Alt and Shift: ') +
       Object.entries(SHORTCUTS).map(([k, [d]]) => k.slice(3) + ' ' + d).join('. '))],
   };
   document.addEventListener('keydown', e => {
@@ -639,7 +650,7 @@
   function fixMessages(root) {
     for (const seg of root.querySelectorAll(SEG_SEL)) {
       const user = seg.classList.contains('segment-user');
-      const who = user ? 'Du' : (seg.querySelector('.segment-avatar img')?.alt || 'Kimi');
+      const who = user ? L('Du', 'You') : (seg.querySelector('.segment-avatar img')?.alt || 'Kimi');
       if (!segId(seg)) continue;
       for (const img of seg.querySelectorAll('.segment-avatar img')) setAttr(img, 'aria-hidden', 'true');
       if (!settings.headings) { seg.querySelector(':scope > h3[data-ka-own]')?.remove(); continue; }
@@ -665,7 +676,7 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.target.isContentEditable) markSend();
   }, true);
-  document.addEventListener('click', e => { if (e.target.closest?.('.send-button-container, .send-button, [aria-label=Senden]')) markSend(); }, true);
+  document.addEventListener('click', e => { if (e.target.closest?.(`.send-button-container, .send-button, [aria-label="${SEND_LABEL}"]`)) markSend(); }, true);
   window.__ka = { ansState, settings, get lastSendAt() { return lastSendAt; } };
 
   function trackAnswers() {
@@ -675,7 +686,7 @@
       if (ansState.has(id)) continue;
       const fresh = lastSendAt && Date.now() - lastSendAt < 120000;
       ansState.set(id, fresh ? { spoken: 0, text: '', done: false, changed: Date.now() } : { done: true });
-      if (fresh && !document.querySelector('.typing-indicator')) announce('Kimi antwortet');
+      if (fresh && !document.querySelector('.typing-indicator')) announce(L('Kimi antwortet', 'Kimi is answering'));
     }
     const seg = lastAnswer();
     const st = seg && ansState.get(segId(seg));
@@ -697,22 +708,22 @@
     if (t !== st.text) { st.text = t; st.changed = Date.now(); return; }
     if (!t || isTyping() || Date.now() - st.changed < 1500) return;
     st.done = true;
-    if (settings.speak === 'off') announce('Antwort fertig');
+    if (settings.speak === 'off') announce(L('Antwort fertig', 'Answer complete'));
     else {
       const rest = t.slice(settings.speak === 'stream' ? st.spoken : 0).trim();
-      if (rest.length > 6000) announce('Antwort fertig, ' + t.length + ' Zeichen. Alt Umschalt M springt hin. ' + rest.slice(0, 1500));
-      else announce(rest || 'Antwort fertig');
+      if (rest.length > 6000) announce(L(`Antwort fertig, ${t.length} Zeichen. Alt Umschalt M springt hin. `, `Answer complete, ${t.length} characters. Alt Shift M jumps there. `) + rest.slice(0, 1500));
+      else announce(rest || L('Antwort fertig', 'Answer complete'));
     }
   }, 700);
 
   function readLastAnswer() {
     const seg = lastAnswer();
-    if (!seg) { announce('Keine Antwort gefunden'); return; }
-    announce(answerText(seg) || txt(seg.querySelector('.segment-content')) || 'Leere Antwort');
+    if (!seg) { announce(L('Keine Antwort gefunden', 'No answer found')); return; }
+    announce(answerText(seg) || txt(seg.querySelector('.segment-content')) || L('Leere Antwort', 'Empty answer'));
   }
   function focusLastAnswer() {
     const seg = lastAnswer();
-    if (!seg) { announce('Keine Antwort gefunden'); return; }
+    if (!seg) { announce(L('Keine Antwort gefunden', 'No answer found')); return; }
     const target = seg.querySelector(':scope > h3[data-ka-own]') || seg;
     if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
     seg.scrollIntoView({ block: 'start' });

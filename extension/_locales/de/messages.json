@@ -1,0 +1,50 @@
+{
+  "extDescription": {
+    "message": "Macht kimi.com / kimi.ai für Screenreader zugänglich (Beschriftungen, Rollen, Tastaturbedienung)."
+  },
+  "actionTitle": {
+    "message": "KimiAccess Einstellungen"
+  },
+  "speakLegend": {
+    "message": "Antworten von Kimi vorlesen"
+  },
+  "speakEnd": {
+    "message": "Wenn die Antwort fertig ist"
+  },
+  "speakStream": {
+    "message": "Satzweise schon beim Schreiben"
+  },
+  "speakOff": {
+    "message": "Nicht vorlesen, nur „Antwort fertig“ melden"
+  },
+  "headings": {
+    "message": "Überschrift vor jeder Nachricht („Du“ / „Kimi“)"
+  },
+  "saved": {
+    "message": "Gespeichert"
+  },
+  "shortcutsTitle": {
+    "message": "Tastenkürzel (Alt + Umschalt, Mac: Option + Umschalt)"
+  },
+  "keyI": {
+    "message": "Zum Eingabefeld"
+  },
+  "keyL": {
+    "message": "Letzte Antwort vorlesen"
+  },
+  "keyM": {
+    "message": "Zur letzten Antwort springen"
+  },
+  "keyS": {
+    "message": "Antwort stoppen"
+  },
+  "keyX": {
+    "message": "Dialog oder Seitenbereich schließen"
+  },
+  "keyH": {
+    "message": "Tastenkürzel ansagen"
+  },
+  "langCode": {
+    "message": "de"
+  }
+}

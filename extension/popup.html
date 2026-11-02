@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>KimiAccess Einstellungen</title>
+  <title data-i18n="actionTitle">KimiAccess settings</title>
   <style>
     body { font: 14px/1.5 system-ui, sans-serif; margin: 0; padding: 12px 16px; width: 320px; color: #111; background: #fff; }
     h1 { font-size: 16px; margin: 0 0 8px; }
@@ -25,22 +25,22 @@
 <body>
   <h1>KimiAccess</h1>
   <fieldset>
-    <legend>Antworten von Kimi vorlesen</legend>
-    <label><input type="radio" name="speak" value="end"> Wenn die Antwort fertig ist</label>
-    <label><input type="radio" name="speak" value="stream"> Satzweise schon beim Schreiben</label>
-    <label><input type="radio" name="speak" value="off"> Nicht vorlesen, nur „Antwort fertig“ melden</label>
+    <legend data-i18n="speakLegend"></legend>
+    <label><input type="radio" name="speak" value="end"> <span data-i18n="speakEnd"></span></label>
+    <label><input type="radio" name="speak" value="stream"> <span data-i18n="speakStream"></span></label>
+    <label><input type="radio" name="speak" value="off"> <span data-i18n="speakOff"></span></label>
   </fieldset>
-  <label><input type="checkbox" id="headings"> Überschrift vor jeder Nachricht („Du“ / „Kimi“)</label>
+  <label><input type="checkbox" id="headings"> <span data-i18n="headings"></span></label>
   <p id="status" role="status"></p>
 
-  <h2>Tastenkürzel (Alt + Umschalt, Mac: Option + Umschalt)</h2>
+  <h2 data-i18n="shortcutsTitle"></h2>
   <dl>
-    <dt>I</dt><dd>Zum Eingabefeld</dd>
-    <dt>L</dt><dd>Letzte Antwort vorlesen</dd>
-    <dt>M</dt><dd>Zur letzten Antwort springen</dd>
-    <dt>S</dt><dd>Antwort stoppen</dd>
-    <dt>X</dt><dd>Dialog oder Seitenbereich schließen</dd>
-    <dt>H</dt><dd>Tastenkürzel ansagen</dd>
+    <dt>I</dt><dd data-i18n="keyI"></dd>
+    <dt>L</dt><dd data-i18n="keyL"></dd>
+    <dt>M</dt><dd data-i18n="keyM"></dd>
+    <dt>S</dt><dd data-i18n="keyS"></dd>
+    <dt>X</dt><dd data-i18n="keyX"></dd>
+    <dt>H</dt><dd data-i18n="keyH"></dd>
   </dl>
   <script src="popup.js"></script>
 </body>

@@ -4,6 +4,8 @@
 
 Browser-Erweiterung für Chrome und Brave, die **kimi.ai / kimi.com** für Screenreader bedienbar macht.
 
+> **Sprache:** Beschriftungen, Ansagen und das Einstellungsfenster richten sich nach der **Browsersprache**: Deutsch, wenn der Browser auf Deutsch eingestellt ist, sonst Englisch. Kimis eigene Texte erscheinen in der Sprache, die in Kimi eingestellt ist.
+
 ## Installation (Chrome oder Brave)
 
 1. `chrome://extensions` bzw. `brave://extensions` öffnen.

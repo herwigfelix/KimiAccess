@@ -1,0 +1,50 @@
+{
+  "extDescription": {
+    "message": "Makes kimi.com / kimi.ai accessible with screen readers (labels, roles, keyboard support)."
+  },
+  "actionTitle": {
+    "message": "KimiAccess settings"
+  },
+  "speakLegend": {
+    "message": "Read Kimi's answers aloud"
+  },
+  "speakEnd": {
+    "message": "When the answer is complete"
+  },
+  "speakStream": {
+    "message": "Sentence by sentence while it is being written"
+  },
+  "speakOff": {
+    "message": "Don't read aloud, only announce \"Answer complete\""
+  },
+  "headings": {
+    "message": "Heading before every message (\"You\" / \"Kimi\")"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "shortcutsTitle": {
+    "message": "Keyboard shortcuts (Alt + Shift, Mac: Option + Shift)"
+  },
+  "keyI": {
+    "message": "Go to message input"
+  },
+  "keyL": {
+    "message": "Read last answer"
+  },
+  "keyM": {
+    "message": "Jump to last answer"
+  },
+  "keyS": {
+    "message": "Stop answer"
+  },
+  "keyX": {
+    "message": "Close dialog or side panel"
+  },
+  "keyH": {
+    "message": "Announce shortcuts"
+  },
+  "langCode": {
+    "message": "en"
+  }
+}
