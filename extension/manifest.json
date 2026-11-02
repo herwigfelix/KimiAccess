@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "KimiAccess",
+  "version": "0.1.0",
+  "description": "Macht kimi.com / kimi.ai für Screenreader zugänglich (Beschriftungen, Rollen, Tastaturbedienung).",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://kimi.ai/*",
+        "https://*.kimi.ai/*",
+        "https://kimi.com/*",
+        "https://*.kimi.com/*",
+        "https://kimi.moonshot.cn/*",
+        "https://www.kimi.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "KimiAccess Einstellungen"
+  }
+}
